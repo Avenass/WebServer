@@ -1,10 +1,10 @@
 # WebServer
 
-📌 Overview
+📌 **Overview**
 
 This project consists of creating a fully functional HTTP server from scratch, without using external libraries or frameworks. The goal is to understand and implement the core mechanisms that make the web work, from request handling to response delivery, while respecting the HTTP/1.1 protocol.
 
-⚙️ Features
+⚙️ **Features**
 
 HTTP/1.1 compliance:
 
@@ -38,7 +38,7 @@ Chunked transfer encoding:
 
 Support for responses sent in chunks instead of a single block.
 
-🛠️ Technical Details
+🛠️ **Technical Details**
 
 Implemented in C++98, following the 42 norm.
 
@@ -48,7 +48,7 @@ Event-driven approach using I/O multiplexing for scalability.
 
 Fully modular structure: request parsing, response building, configuration parsing, and CGI execution are handled in separate components.
 
-📚 Learning Outcomes
+📚 **Learning Outcomes**
 
 This project provided a deep understanding of:
 
