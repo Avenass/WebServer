@@ -1,0 +1,556 @@
+<!-- *********************************************************************** -->
+<!--                                                                         -->
+<!--                                                      :::      ::::::::  -->
+<!-- index.html                                         :+:      :+:    :+:  -->
+<!--                                                  +:+ +:+         +:+    -->
+<!-- By: vflores- <vflores-@student.42luxembou      +#+  +:+       +#+       -->
+<!--                                              +#+#+#+#+#+   +#+          -->
+<!-- Created: 2025/08/18 17:22:06 by vflores-          #+#    #+#            -->
+<!-- Updated: 2025/08/18 17:22:08 by vflores-         ###   ########.fr      -->
+<!--                                                                         -->
+<!-- *********************************************************************** -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="icon" type="image/x-icon" href="/images/favicon.ico">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Webserv - HTTP/1.1 Server Evaluation</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 25px 80px rgba(0,0,0,0.3);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        h1 {
+            color: #333;
+            font-size: 2.5em;
+            margin: 0;
+            border-bottom: 4px solid #667eea;
+            padding-bottom: 15px;
+        }
+
+        .server-status {
+            background: linear-gradient(135deg, #4CAF50, #45a049);
+            color: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 20px 0;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .part-header {
+            font-size: 1.8em;
+            font-weight: bold;
+            margin: 50px 0 30px 0;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .mandatory {
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
+            color: white;
+        }
+
+        .bonus {
+            background: linear-gradient(135deg, #f39c12, #e67e22);
+            color: white;
+        }
+
+        .testing {
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            color: white;
+        }
+
+        h2 {
+            color: #667eea;
+            border-left: 4px solid #667eea;
+            padding-left: 15px;
+            margin-top: 30px;
+            font-size: 1.3em;
+        }
+
+        .section {
+            margin: 25px 0;
+            padding: 25px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            background: #fafafa;
+        }
+
+        .test-links {
+            list-style: none;
+            padding: 0;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 15px;
+        }
+
+        .test-links li {
+            margin: 0;
+            padding: 15px;
+            background: white;
+            border: 1px solid #eee;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+        }
+
+        .test-links li:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+            border-color: #667eea;
+        }
+
+        .method {
+            font-weight: bold;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+            margin-right: 10px;
+            min-width: 45px;
+            text-align: center;
+        }
+
+        .method.get { background: #27ae60; color: white; }
+        .method.post { background: #e74c3c; color: white; }
+        .method.delete { background: #e67e22; color: white; }
+        .method.status { background: #9b59b6; color: white; }
+        .method.config { background: #34495e; color: white; }
+
+        a {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 500;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+
+        .upload-form {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            border: 2px dashed #ddd;
+            margin: 15px 0;
+        }
+
+        input[type="file"], input[type="text"], textarea {
+            margin: 8px 0;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            width: 100%;
+            max-width: 400px;
+            font-family: inherit;
+        }
+
+        button {
+            background: #667eea;
+            color: white;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            transition: background 0.3s;
+        }
+
+        button:hover {
+            background: #5a6fd8;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .info-card {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+        }
+
+        .result-area {
+            margin-top: 15px;
+            padding: 10px;
+            background: #f8f9fa;
+            border-radius: 5px;
+            min-height: 30px;
+        }
+
+        .emoji {
+            font-size: 1.2em;
+            margin-right: 8px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🌐 Webserv HTTP/1.1 Server</h1>
+            <div class="server-status">
+                ✅ Server Running Successfully - Ready for Evaluation
+            </div>
+            <div class="info-grid">
+                <div class="info-card">
+                    <strong>Server:</strong> webserv/1.0<br>
+                    <strong>Protocol:</strong> HTTP/1.1<br>
+                    <strong>Primary Port:</strong> 8080
+                </div>
+                <div class="info-card">
+                    <strong>Methods:</strong> GET, POST, DELETE<br>
+                    <strong>CGI:</strong> Python, PHP<br>
+                    <strong>Features:</strong> Static files, Upload, Sessions
+                </div>
+            </div>
+        </div>
+
+        <!-- MANDATORY PART -->
+        <div class="part-header mandatory">
+            🔴 MANDATORY PART - EVALUATION REQUIREMENTS
+        </div>
+
+        <!-- HTTP Methods -->
+        <div class="section">
+            <h2><span class="emoji">📡</span>HTTP Methods (GET, POST, DELETE)</h2>
+            <ul class="test-links">
+                <li>
+                    <span class="method get">GET</span>
+                    <a href="/">Current page (index.html)</a>
+                </li>
+                <li>
+                    <span class="method get">GET</span>
+                    <a href="/style.css">Static CSS file</a>
+                </li>
+                <li>
+                    <span class="method post">POST</span>
+                    <span>File upload (form below)</span>
+                </li>
+                <li>
+                    <span class="method delete">DELETE</span>
+                    <span>Delete files (test below)</span>
+                </li>
+            </ul>
+        </div>
+
+        <!-- File Upload -->
+        <div class="section">
+            <h2><span class="emoji">📤</span>File Upload & Management</h2>
+            <div class="upload-form">
+                <h3>Upload File (POST Method)</h3>
+                <form action="/uploads" method="post" enctype="multipart/form-data">
+                    <input type="file" name="file" required>
+                    <br>
+                    <button type="submit">Upload File</button>
+                </form>
+            </div>
+
+            <ul class="test-links">
+                <li>
+                    <span class="method get">GET</span>
+                    <a href="/uploads/">View uploaded files (autoindex)</a>
+                </li>
+                <li>
+                    <span class="method delete">DELETE</span>
+                    <span>Delete file:
+                        <input type="text" id="deleteFile" placeholder="filename.txt" style="width: 150px;">
+                        <button onclick="deleteFile()">Delete</button>
+                    </span>
+                </li>
+            </ul>
+            <div id="delete-result" class="result-area"></div>
+        </div>
+
+        <!-- CGI Scripts -->
+        <div class="section">
+            <h2><span class="emoji">🔧</span>CGI Execution</h2>
+            <ul class="test-links">
+                <li>
+                    <span class="method get">GET</span>
+                    <a href="/cgi-bin/hello.py">Python CGI - Hello World</a>
+                </li>
+                <li>
+                    <span class="method get">GET</span>
+                    <a href="/cgi-bin/info.py">Python CGI - Server Info</a>
+                </li>
+                <li>
+                    <span class="method post">POST</span>
+                    <span>CGI Form Test:</span>
+                </li>
+            </ul>
+
+            <div class="upload-form">
+                <form action="/cgi-bin/form.py" method="post">
+                    <input type="text" name="message" placeholder="Enter message for CGI" required>
+                    <button type="submit">Send to CGI</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- HTTP Status Codes -->
+        <div class="section">
+            <h2><span class="emoji">📊</span>HTTP Status Codes</h2>
+            <ul class="test-links">
+                <li>
+                    <span class="method status">200</span>
+                    <a href="/">OK - This page</a>
+                </li>
+                <li>
+                    <span class="method status">404</span>
+                    <a href="/nonexistent-page">Not Found - Custom error page</a>
+                </li>
+                <li>
+                    <span class="method status">405</span>
+                    <span>Method Not Allowed: <button onclick="testMethodNotAllowed()">Test PUT on /</button></span>
+                </li>
+                <li>
+                    <span class="method status">413</span>
+                    <span>Payload Too Large: <button onclick="testLargePayload()">Test Large Body</button></span>
+                </li>
+            </ul>
+            <div id="status-result" class="result-area"></div>
+        </div>
+
+        <!-- Server Configuration -->
+        <div class="section">
+            <h2><span class="emoji">⚙️</span>Server Configuration</h2>
+            <ul class="test-links">
+                <li>
+                    <span class="method config">PORT</span>
+                    <a href="http://localhost:8080">Port 8080 (Primary Server)</a>
+                </li>
+                <li>
+                    <span class="method config">PORT</span>
+                    <a href="http://localhost:8081">Port 8081 (Secondary Server)</a>
+                </li>
+                <li>
+                    <span class="method config">REDIR</span>
+                    <a href="/redirect-test">HTTP Redirect Test</a>
+                </li>
+                <li>
+                    <span class="method config">LIMIT</span>
+                    <span>Body Size Limit Test (configured in server)</span>
+                </li>
+            </ul>
+        </div>
+
+        <!-- Static Website -->
+        <div class="section">
+            <h2><span class="emoji">📁</span>Static File Serving</h2>
+            <ul class="test-links">
+                <li>
+                    <span class="method get">HTML</span>
+                    <a href="/test.html">Test HTML page</a>
+                </li>
+                <li>
+                    <span class="method get">CSS</span>
+                    <a href="/style.css">CSS stylesheet</a>
+                </li>
+                <li>
+                    <span class="method get">DIR</span>
+                    <a href="/public/">Directory listing (autoindex)</a>
+                </li>
+                <li>
+                    <span class="method get">404</span>
+                    <a href="/missing-file.html">Missing file (404 test)</a>
+                </li>
+            </ul>
+        </div>
+
+        <!-- BONUS PART -->
+        <div class="part-header bonus">
+            🟡 BONUS PART - ADDITIONAL FEATURES
+        </div>
+
+        <!-- Cookies & Sessions -->
+        <div class="section">
+            <h2><span class="emoji">🍪</span>Simple Cookies Demo</h2>
+            <ul class="test-links">
+                <li>
+                    <span class="method get">COOKIE</span>
+                    <a href="/cookie-test.html">Basic Cookie Test</a>
+                </li>
+                <li>
+                    <span class="method get">DEBUG</span>
+                    <span>Check Browser DevTools → Application → Cookies</span>
+                </li>
+                <li>
+                    <span class="method get">TEST</span>
+                    <span>Refresh page to see cookie persistence</span>
+                </li>
+            </ul>
+        </div>
+
+        <!-- Multiple CGI -->
+        <div class="section">
+            <h2><span class="emoji">🔧</span>Multiple CGI Support</h2>
+            <ul class="test-links">
+                <li>
+                    <span class="method get">PYTHON</span>
+                    <a href="/cgi-bin/hello.py">Python CGI Scripts</a>
+                </li>
+                <li>
+                    <span class="method get">PHP</span>
+                    <a href="/cgi-php/test.php">PHP CGI Scripts</a>
+                </li>
+            </ul>
+        </div>
+
+        <!-- TESTING TOOLS -->
+        <div class="part-header testing">
+            🔧 TESTING & EVALUATION TOOLS
+        </div>
+
+        <!-- Automated Tests -->
+        <div class="section">
+            <h2><span class="emoji">🧪</span>Automated Tests</h2>
+            <div class="info-grid">
+                <div class="info-card">
+                    <button onclick="testAllMethods()">Test All HTTP Methods</button>
+                    <div id="methods-result" class="result-area"></div>
+                </div>
+                <div class="info-card">
+                    <button onclick="testStressBasic()">Basic Stress Test</button>
+                    <div id="stress-result" class="result-area"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Debug Information -->
+        <div class="section">
+            <h2><span class="emoji">🔍</span>Debug Information</h2>
+            <div class="info-grid">
+                <div class="info-card">
+                    <strong>Current Request Headers:</strong><br>
+                    <small>User-Agent: <span id="user-agent"></span></small><br>
+                    <small>Host: <span id="host"></span></small>
+                </div>
+                <div class="info-card">
+                    <strong>Connection Info:</strong><br>
+                    <small>Protocol: HTTP/1.1</small><br>
+                    <small>Method: GET</small>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+
+        document.getElementById('user-agent').textContent = navigator.userAgent;
+        document.getElementById('host').textContent = window.location.host;
+
+        async function deleteFile() {
+            const filename = document.getElementById('deleteFile').value;
+            const result = document.getElementById('delete-result');
+
+            if (!filename) {
+                result.innerHTML = '<p style="color: red;">Please enter a filename</p>';
+                return;
+            }
+
+            try {
+                const response = await fetch(`/uploads/${filename}`, {
+                    method: 'DELETE'
+                });
+
+                if (response.ok) {
+                    result.innerHTML = `<p style="color: green;">✅ File "${filename}" deleted successfully</p>`;
+                    document.getElementById('deleteFile').value = '';
+                } else {
+                    result.innerHTML = `<p style="color: red;">❌ Error: ${response.status} ${response.statusText}</p>`;
+                }
+            } catch (error) {
+                result.innerHTML = `<p style="color: red;">❌ Error: ${error.message}</p>`;
+            }
+        }
+
+        async function testMethodNotAllowed() {
+            const result = document.getElementById('status-result');
+            try {
+                const response = await fetch('/', { method: 'PUT' });
+                result.innerHTML = `<p>PUT /: ${response.status} ${response.statusText}</p>`;
+            } catch (error) {
+                result.innerHTML = `<p>Error: ${error.message}</p>`;
+            }
+        }
+
+        async function testLargePayload() {
+            const result = document.getElementById('status-result');
+            const largeData = 'x'.repeat(20 * 1024 * 1024);
+            try {
+                const response = await fetch('/uploads', {
+                    method: 'POST',
+                    body: largeData
+                });
+                result.innerHTML = `<p>Large payload: ${response.status} ${response.statusText}</p>`;
+            } catch (error) {
+                result.innerHTML = `<p>Error: ${error.message}</p>`;
+            }
+        }
+
+        async function testAllMethods() {
+            const result = document.getElementById('methods-result');
+            const tests = [
+                { method: 'GET', url: '/' },
+                { method: 'POST', url: '/uploads' },
+                { method: 'DELETE', url: '/uploads/test.txt' },
+                { method: 'PUT', url: '/' }
+            ];
+
+            let output = '<h4>HTTP Methods Test Results:</h4>';
+            for (const test of tests) {
+                try {
+                    const response = await fetch(test.url, { method: test.method });
+                    output += `<p>${test.method} ${test.url}: <strong>${response.status}</strong></p>`;
+                } catch (error) {
+                    output += `<p>${test.method} ${test.url}: <strong>Error</strong></p>`;
+                }
+            }
+            result.innerHTML = output;
+        }
+
+        async function testStressBasic() {
+            const result = document.getElementById('stress-result');
+            result.innerHTML = '<p>Running basic stress test...</p>';
+
+            const promises = [];
+            for (let i = 0; i < 50; i++) {
+                promises.push(fetch('/'));
+            }
+
+            try {
+                const responses = await Promise.all(promises);
+                const successCount = responses.filter(r => r.ok).length;
+                result.innerHTML = `<p>Completed 50 requests: <strong>${successCount}/50 successful</strong></p>`;
+            } catch (error) {
+                result.innerHTML = `<p>Stress test failed: ${error.message}</p>`;
+            }
+        }
+    </script>
+</body>
+</html>

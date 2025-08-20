@@ -1,0 +1,93 @@
+<!-- *********************************************************************** -->
+<!--                                                                         -->
+<!--                                                      :::      ::::::::  -->
+<!-- test.html                                          :+:      :+:    :+:  -->
+<!--                                                  +:+ +:+         +:+    -->
+<!-- By: vflores- <vflores-@student.42luxembou      +#+  +:+       +#+       -->
+<!--                                              +#+#+#+#+#+   +#+          -->
+<!-- Created: 2025/08/18 17:21:17 by vflores-          #+#    #+#            -->
+<!-- Updated: 2025/08/18 17:21:20 by vflores-         ###   ########.fr      -->
+<!--                                                                         -->
+<!-- *********************************************************************** -->
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Page - Webserv</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0;
+        }
+        .container {
+            background: white;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            max-width: 600px;
+            text-align: center;
+        }
+        h1 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+        }
+        .success-badge {
+            display: inline-block;
+            background: #27ae60;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 50px;
+            margin: 20px 0;
+        }
+        .info {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 5px;
+            margin: 20px 0;
+        }
+        .back-btn {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 12px 30px;
+            background: #3498db;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background 0.3s;
+        }
+        .back-btn:hover {
+            background: #2980b9;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>✅ Página de Test Estática</h1>
+        <div class="success-badge">GET Request Exitoso</div>
+
+        <div class="info">
+            <p><strong>Esta es una página HTML estática</strong></p>
+            <p>Si puedes ver este contenido, significa que el servidor está sirviendo correctamente archivos estáticos mediante el método GET.</p>
+            <p>Servidor: webserv/1.0</p>
+            <p>Protocolo: HTTP/1.1</p>
+        </div>
+
+        <p>Esta página demuestra que el servidor puede:</p>
+        <ul style="text-align: left; display: inline-block;">
+            <li>Procesar solicitudes GET</li>
+            <li>Servir archivos HTML</li>
+            <li>Manejar rutas correctamente</li>
+            <li>Enviar respuestas HTTP válidas</li>
+        </ul>
+
+        <a href="/" class="back-btn">← Volver al Inicio</a>
+    </div>
+</body>
+</html>
